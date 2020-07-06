@@ -1,4 +1,6 @@
-https://github.com/justadudewhohacks/face-api.js
+Live https://face-api-js-example.netlify.app/
+
+Docs https://github.com/justadudewhohacks/face-api.js
 
 ```bash
 git submodule update --init --recursive
