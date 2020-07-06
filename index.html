@@ -3,9 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Face</title>
-    <script src="https://github.com/justadudewhohacks/face-api.js/blob/master/dist/face-api.min.js"></script>
+    <script src="./face-api.js/dist/face-api.js"></script>
 </head>
 <body>
-  <img src="https://play-images-prod-cms.tech.tvnz.co.nz/api/v1/web/image/content/dam/images/entertainment/shows/f/friends/friends-coverimg.png.2017-11-10T14:07:23+13:00.jpg?width=960&height=540">
+  <img id="image_with_faces" src="./friends-coverimg.jpeg">
+  <canvas id="image_canvas" style="position: absolute; top: 8px; left: 8px; width: 960px; height: 540px;"></canvas>
+
+  <div>
+    <input type="file" id="image_file">
+    <button id="show_faces">Показать лица</button>
+    <span id="notification">Подождите...</span>
+  </div>
+
+
+  <script type="text/javascript">
+    const loadModels = async function() {
+      const MODEL_URL = './face-api.js/weights'
+
+      await faceapi.loadSsdMobilenetv1Model(MODEL_URL)
+      await faceapi.loadFaceLandmarkModel(MODEL_URL)
+      await faceapi.loadFaceRecognitionModel(MODEL_URL)
+      await faceapi.loadFaceExpressionModel(MODEL_URL)
+
+      console.log('models loaded')
+      document.querySelector('#notification').textContent = 'Можно запускать'
+    }
+    loadModels();
+
+    const draw = async function() {
+      const input = document.getElementById('image_with_faces')
+      const options = faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 });
+      // let fullFaceDescriptions = await faceapi.detectAllFaces(input, options).withFaceLandmarks().withFaceDescriptors()
+      let fullFaceDescriptions = await faceapi.detectAllFaces(input, options).withFaceLandmarks().withFaceExpressions()
+
+      let canvas = document.getElementById('image_canvas');
+      faceapi.matchDimensions(canvas, input)
+      resizedResults = faceapi.resizeResults(fullFaceDescriptions, input)
+
+      faceapi.draw.drawDetections(canvas, resizedResults)
+      const minProbability = 0.05
+      faceapi.draw.drawFaceExpressions(canvas, resizedResults, minProbability)
+      // faceapi.draw.drawFaceLandmarks(canvas, resizedResults)
+      // faceapi.draw.drawFaceDescriptors(canvas, resizedResults)
+    }
+
+    document.querySelector('#show_faces').addEventListener('click', draw)
+
+    let image = document.querySelector('#image_with_faces')
+    const adjustCanvas = function() {
+      let canvas = document.querySelector('canvas')
+      canvas.style.width = `${image.width}px`;
+      canvas.style.height = `${image.height}px`;
+    }
+    image.addEventListener('load', adjustCanvas)
+
+    document.querySelector('#image_file').addEventListener('change', function(event) {
+      var tgt = event.target || window.event.srcElement,
+          files = tgt.files;
+
+      var fr = new FileReader();
+      fr.addEventListener('load', function() {
+        document.querySelector('#image_with_faces').src = fr.result;
+      })
+      fr.readAsDataURL(files[0]);
+    })
+  </script>
 </body>
 </html>
