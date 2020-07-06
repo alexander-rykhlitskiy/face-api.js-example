@@ -1,6 +1,11 @@
-Live https://face-api-js-example.netlify.app/
+* Faces
+    * Live https://neural-networks.netlify.app/
+    * Docs https://github.com/justadudewhohacks/face-api.js
+* Objects
+    * Live https://neural-networks.netlify.app/objects
+    * Docx https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd
 
-Docs https://github.com/justadudewhohacks/face-api.js
+More networks here https://www.tensorflow.org/js/models
 
 ```bash
 git submodule update --init --recursive

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Face</title>
+    <title>Faces</title>
     <script src="./face-api.js/dist/face-api.js"></script>
 </head>
 <body>
@@ -11,8 +11,8 @@
 
   <div>
     <input type="file" id="image_file">
-    <button id="show_faces">Показать лица</button>
-    <span id="notification">Подождите...</span>
+    <button id="show_faces">Show faces</button>
+    <span id="notification">Wait for it...</span>
   </div>
 
 
@@ -26,7 +26,7 @@
       await faceapi.loadFaceExpressionModel(MODEL_URL)
 
       console.log('models loaded')
-      document.querySelector('#notification').textContent = 'Можно запускать'
+      document.querySelector('#notification').textContent = 'You can run it now'
     }
     loadModels();
 
